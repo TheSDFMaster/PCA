@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<title>PCA</title>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+
+<body class="chat" id="chat">
+
+	<div id="optionBar">
+		<div id="goBackDiv">
+			<button onclick="location.href='https://reimagined-space-broccoli-9r4rprq5ggqcxg5p-8080.app.github.dev/';" id="goBack">Home</button>
+		</div>
+		<div id="roomDiv">
+			<a id="room"></a>
+		</div>
+		<div id="optionsDiv">
+			<button id="options">Options</button>
+		</div>
+	</div>
+	<div id="bigDiv">
+
+	</div>
+
+	<div class="form">
+		<form class="form" method="POST" id="sender">
+			<input autocomplete="off" required placeholder="Send a message" id="message" name="Message" type="text" />
+			<button style="display:none" type="submit">Send</button>
+		</form>
+	</div>
+
+	<div id="modal">
+		<div id="optionsPopup">
+			<div class="up">
+				<h1>Settings</h1>
+				<h3 style="margin-bottom: 35px; font-weight: 600;">Choose background image</h3>
+				<input accept="image/png, image/jpeg" name="uploadBg" type="file" id="bgUpload" class="hidden"
+					style="display:none;">
+				<label id="bgLabel" for="bgUpload">Select file</label><br>
+				<h3 style="margin-top: 30px;margin-bottom: 10px;font-weight: 600;">Choose background anchor</h3>
+				<div class="dropdown">
+					<div class="select">
+						<span class="selected">Top</span>
+						<div class="caret"></div>
+				</div>
+					<ul class="menu">
+						<li class="active">Top</li>
+						<li>Center</li>
+						<li>Bottom</li>
+					</ul>
+				</div>
+			</div>
+
+			<div class="down">
+				<button class="close">Close settings</button>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		document.getElementById("room").innerHTML = sessionStorage.getItem("Chat");
+	</script>
+	<script src="client.js" defer></script>
+	<script src="chat/read.js" defer></script>
+	<script src="chat/settings.js" defer></script>
+	<script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+</body>
+
+</html>
