@@ -1,4 +1,0 @@
-"scripts": {
-  "start": "node server.js",
-  "build": "echo 'Nothing to build for the backend'"
-}
