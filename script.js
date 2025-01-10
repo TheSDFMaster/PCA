@@ -206,6 +206,9 @@ socket.onmessage = function (event) {
         }
     } else {
         const message = `${data.username}: ${data.message}`;
+        if (document.visibilityState !== "visible"){
+            var notif = new Notification(data.username, {"body": data.message});
+        }
         const paragraph = document.createElement("p");
         paragraph.innerHTML = message;
         messageContainer.appendChild(paragraph);
