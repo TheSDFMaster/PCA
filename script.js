@@ -5,21 +5,19 @@ const socket = new WebSocket("wss://special-space-rotary-phone-w64954xxjjv2vv7w-
 document.title = "PCA";
 
 // Request notification permission
-if ("Notification" in window && Notification.permission !== "granted") {
-    Notification.requestPermission().then((permission) => {
-        console.log(`Notification permission: ${permission}`);
-        if (permission === "granted") {
-            canReceiveNotifications = true;  // Enable notifications if permission granted
-        }
-    });
-} else if (Notification.permission === "granted") {
-    canReceiveNotifications = true;  // Enable notifications if already granted
-}
-
 let canReceiveNotifications = false;
-setTimeout(() => {
-    canReceiveNotifications = true;  // This is to allow receiving notifications after 10 seconds.
-}, 10000);
+
+if ("Notification" in window) {
+    if (Notification.permission === "granted") {
+        canReceiveNotifications = true;
+    } else if (Notification.permission !== "denied") {
+        Notification.requestPermission().then((permission) => {
+            if (permission === "granted") {
+                canReceiveNotifications = true;
+            }
+        });
+    }
+}
 
 function showNotification(title, message) {
     if (!message.trim()) return;  // Don't show if message is empty
@@ -27,7 +25,7 @@ function showNotification(title, message) {
     if (Notification.permission === "granted" && canReceiveNotifications) {
         new Notification(title, {
             body: message,
-            icon: "",
+            icon: "",  // You can provide a URL to an icon if you want
         });
     }
 }
