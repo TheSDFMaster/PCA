@@ -179,6 +179,15 @@ form.addEventListener("submit", (event) => {
     inputElement.value = "";
 });
 
+// WebSocket open event
+socket.onopen = function () {
+    socket.send(JSON.stringify({
+        "action": "join",
+        "username": username,
+        "password": "123456",
+    }));
+};
+
 // WebSocket onmessage (receive new messages)
 socket.onmessage = function (event) {
     const data = JSON.parse(event.data);
