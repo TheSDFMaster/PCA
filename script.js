@@ -212,7 +212,6 @@ socket.onopen = function () {
         "action": "join",
         "username": username,
         "password": "123456",
-        "mail":"jesuisgay@gaysex.com"
     }));
 };
 
