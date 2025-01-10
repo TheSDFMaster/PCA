@@ -112,13 +112,14 @@ loadingScreen.innerHTML = `
     </div>
 `;
 
-// Add loading screen to the body
 document.body.appendChild(loadingScreen);
 
 // Progress bar update function
 let loadingProgress = 0;
+let loadingComplete = false;  // Flag to track loading completion
+
 function updateLoadingProgress() {
-    if (loadingProgress < 100) {
+    if (loadingProgress < 100 && !loadingComplete) {
         loadingProgress += Math.random() * 2 + 1; // Randomize step to make it less linear
         loadingProgress = Math.min(loadingProgress, 100); // Prevent exceeding 100%
         
@@ -127,6 +128,14 @@ function updateLoadingProgress() {
 
         // Keep animating the progress bar smoothly
         requestAnimationFrame(updateLoadingProgress);
+    } else if (loadingProgress === 100 && !loadingComplete) {
+        loadingComplete = true; // Mark loading as complete when the progress reaches 100%
+        // Now remove the loading screen after the progress is complete
+        setTimeout(() => {
+            if (document.body.contains(loadingScreen)) {
+                document.body.removeChild(loadingScreen);
+            }
+        }, 1000); // Add a slight delay for smooth transition
     }
 }
 
