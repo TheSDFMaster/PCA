@@ -191,22 +191,29 @@ socket.onopen = function () {
 // WebSocket onmessage (receive new messages)
 socket.onmessage = function (event) {
     const data = JSON.parse(event.data);
-    console.log(data);
+    console.log('Received data:', data);  // Debugging log
 
     if (data.action === "pong") {
-        return;
+        return; // Ignore pong messages
     }
 
     if (data.action === "load") {
+        // Check if content is being loaded
         const content = data.content;
-        content.forEach(doc => {
-            const paragraph = document.createElement("p");
-            paragraph.innerHTML = `${doc.username}: ${doc.message}`;
-            messageContainer.appendChild(paragraph);
+        if (!content || content.length === 0) {
+            console.log("No messages to load");
+        } else {
+            console.log("Loaded messages:", content);
+            content.forEach(doc => {
+                const paragraph = document.createElement("p");
+                paragraph.innerHTML = `${doc.username}: ${doc.message}`;
+                messageContainer.appendChild(paragraph);
 
-            // Show notification when a new message is received
-            showNotification(doc.username, doc.message);
-        });
+                // Show notification when a new message is received
+                showNotification(doc.username, doc.message);
+            });
+        }
+
         messageContainer.scrollTop = messageContainer.scrollHeight;
 
         // Hide loading screen once messages are loaded
@@ -214,8 +221,9 @@ socket.onmessage = function (event) {
             document.body.removeChild(loadingScreen);
         }
     } else {
+        // Handle new messages
         const message = `${data.username}: ${data.message}`;
-        if (document.visibilityState !== "visible"){
+        if (document.visibilityState !== "visible") {
             var notif = new Notification(data.username, {"body": data.message});
         }
         const paragraph = document.createElement("p");
@@ -227,7 +235,6 @@ socket.onmessage = function (event) {
         showNotification(data.username, data.message);
     }
 };
-
 // Get current time
 function getCurrentTime() {
     const now = new Date();
