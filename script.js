@@ -4,12 +4,6 @@ let textColor = "FFFFFF"; // Initially set text color
 const socket = new WebSocket("wss://special-space-rotary-phone-w64954xxjjv2vv7w-8080.app.github.dev/");
 document.title = "PCA";
 
-// Remove favicon
-const favicon = document.querySelector("link[rel~='icon']");
-if (favicon) {
-    favicon.remove();
-}
-
 // Request notification permission
 if ("Notification" in window && Notification.permission !== "granted") {
     Notification.requestPermission().then((permission) => {
