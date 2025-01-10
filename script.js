@@ -8,16 +8,22 @@ document.title = "PCA";
 if ("Notification" in window && Notification.permission !== "granted") {
     Notification.requestPermission().then((permission) => {
         console.log(`Notification permission: ${permission}`);
+        if (permission === "granted") {
+            canReceiveNotifications = true;  // Enable notifications if permission granted
+        }
     });
+} else if (Notification.permission === "granted") {
+    canReceiveNotifications = true;  // Enable notifications if already granted
 }
 
 let canReceiveNotifications = false;
 setTimeout(() => {
-    canReceiveNotifications = true;
+    canReceiveNotifications = true;  // This is to allow receiving notifications after 10 seconds.
 }, 10000);
 
 function showNotification(title, message) {
-    if (!message.trim()) return;
+    if (!message.trim()) return;  // Don't show if message is empty
+
     if (Notification.permission === "granted" && canReceiveNotifications) {
         new Notification(title, {
             body: message,
@@ -175,50 +181,7 @@ form.addEventListener("submit", (event) => {
     inputElement.value = "";
 });
 
-socket.onerror = function () {
-    // Stop loading bar
-    loadingProgress = 50;
-    const progressBar = loadingScreen.querySelector(".progress");
-    progressBar.style.width = "50%";
-
-    // Show error message
-    const errorMessage = document.createElement("div");
-    errorMessage.style.color = "red";
-    errorMessage.style.fontSize = "34px";
-    errorMessage.style.fontWeight = "bold";
-    errorMessage.style.position = "fixed";
-    errorMessage.style.top = "50%";
-    errorMessage.style.left = "50%";
-    errorMessage.style.transform = "translate(-50%, -50%)"; // Center the message
-    errorMessage.style.textAlign = "center";
-    errorMessage.style.padding = "20px";
-    errorMessage.style.backgroundColor = "#1A1A2E"; // Optional background for better readability
-    errorMessage.style.borderRadius = "10px";
-    errorMessage.style.zIndex = "1001"; // Ensure it's above other elements
-    errorMessage.textContent = "WebSocket connection failed. Please try again later.";
-    document.body.appendChild(errorMessage);
-
-    // Check if loading screen still exists before removing
-    if (document.body.contains(loadingScreen)) {
-        // Remove loading screen after 2 seconds
-        setTimeout(() => {
-            if (document.body.contains(loadingScreen)) {
-                document.body.removeChild(loadingScreen);
-            }
-        }, 2000);
-    }
-};
-
-// WebSocket open event
-socket.onopen = function () {
-    socket.send(JSON.stringify({
-        "action": "join",
-        "username": username,
-        "password": "123456",
-    }));
-};
-
-// WebSocket message event
+// WebSocket onmessage (receive new messages)
 socket.onmessage = function (event) {
     const data = JSON.parse(event.data);
     console.log(data);
@@ -233,8 +196,12 @@ socket.onmessage = function (event) {
             const paragraph = document.createElement("p");
             paragraph.innerHTML = `${doc.username}: ${doc.message}`;
             messageContainer.appendChild(paragraph);
+
+            // Show notification when a new message is received
+            showNotification(doc.username, doc.message);
         });
         messageContainer.scrollTop = messageContainer.scrollHeight;
+
         // Hide loading screen once messages are loaded
         if (document.body.contains(loadingScreen)) {
             document.body.removeChild(loadingScreen);
@@ -245,6 +212,9 @@ socket.onmessage = function (event) {
         paragraph.innerHTML = message;
         messageContainer.appendChild(paragraph);
         messageContainer.scrollTop = messageContainer.scrollHeight;
+
+        // Show notification when a new message is received
+        showNotification(data.username, data.message);
     }
 };
 
