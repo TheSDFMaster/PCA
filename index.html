@@ -41,6 +41,7 @@
   </div>
 
   <audio id="alarmSound" src="alarm.mp3"></audio>
+  <audio id="goalHorn" src="goal_horn.mp3"></audio>
   
   <script>
     let countdown;
@@ -95,12 +96,14 @@
       const localTeamElem = document.getElementById("localTeam");
       let currentScore = parseInt(localTeamElem.textContent) || 0;
       localTeamElem.textContent = currentScore + 1;
+      document.getElementById("goalHorn").play();
     }
 
     function addVisitor() {
       const visitorTeamElem = document.getElementById("visitorTeam");
       let currentScore = parseInt(visitorTeamElem.textContent) || 0;
       visitorTeamElem.textContent = currentScore + 1;
+      document.getElementById("goalHorn").play();
     }
 
     document.addEventListener("keydown", function(event) {
